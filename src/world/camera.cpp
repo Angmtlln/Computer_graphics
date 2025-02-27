@@ -40,7 +40,7 @@ void cg::world::camera::set_angle_of_view(float in_aov)
 void cg::world::camera::set_height(float in_height)
 {
 	height = in_height;
-	aspect_ratio = width/height;
+	aspect_ratio = width / height;
 }
 
 void cg::world::camera::set_width(float in_width)
@@ -68,29 +68,29 @@ const float4x4 cg::world::camera::get_view_matrix() const
 	float3 x_axis = normalize(cross(up, z_axis));
 	float3 y_axis = cross(z_axis, x_axis);
 	return float4x4{
-				{x_axis.x, y_axis.x, z_axis.x, 0},
-				{x_axis.y, y_axis.y, z_axis.y, 0},
-				{x_axis.z, y_axis.z, z_axis.z, 0},
-				{-dot(x_axis, position), -dot(y_axis, position), -dot(z_axis, position), 1}};
+			{x_axis.x, y_axis.x, z_axis.x, 0},
+			{x_axis.y, y_axis.y, z_axis.y, 0},
+			{x_axis.z, y_axis.z, z_axis.z, 0},
+			{-dot(x_axis, position), -dot(y_axis, position), -dot(z_axis, position), 1}};
 }
 
 #ifdef DX12
 const DirectX::XMMATRIX cg::world::camera::get_dxm_view_matrix() const
 {
 	// TODO Lab: 3.08 Implement `get_dxm_view_matrix`, `get_dxm_projection_matrix`, and `get_dxm_mvp_matrix` methods of `camera`
-	return  DirectX::XMMatrixIdentity();
+	return DirectX::XMMatrixIdentity();
 }
 
 const DirectX::XMMATRIX cg::world::camera::get_dxm_projection_matrix() const
 {
 	// TODO Lab: 3.08 Implement `get_dxm_view_matrix`, `get_dxm_projection_matrix`, and `get_dxm_mvp_matrix` methods of `camera`
-	return  DirectX::XMMatrixIdentity();
+	return DirectX::XMMatrixIdentity();
 }
 
 const DirectX::XMMATRIX camera::get_dxm_mvp_matrix() const
 {
 	// TODO Lab: 3.08 Implement `get_dxm_view_matrix`, `get_dxm_projection_matrix`, and `get_dxm_mvp_matrix` methods of `camera`
-	return  DirectX::XMMatrixIdentity();
+	return DirectX::XMMatrixIdentity();
 }
 #endif
 
@@ -98,10 +98,12 @@ const float4x4 cg::world::camera::get_projection_matrix() const
 {
 	float f = 1.f / tanf(angle_of_view / 2.f);
 	return float4x4{
-				{f / aspect_ratio, 0, 0, 0},
-				{0, f, 0, 0},
-				{0, 0, z_far / (z_near - z_far), -1},
-				{0, 0, z_far * z_near / (z_near - z_far), 0}};
+			{f / aspect_ratio, 0, 0, 0},
+			{0, f, 0, 0},
+			{0, 0, z_far / (z_near - z_far), -1},
+			{0, 0, (z_far * z_near) / (z_near - z_far), 0},
+
+	};
 }
 
 const float3 cg::world::camera::get_position() const
@@ -112,10 +114,9 @@ const float3 cg::world::camera::get_position() const
 const float3 cg::world::camera::get_direction() const
 {
 	return float3{
-		std::sin(theta * std::cos(phi)),
-		std::sin(phi),
-		-std::cos(theta) * cos(phi),
-	};
+			sin(theta) * cos(phi),
+			sin(phi),
+			-cos(theta) * cos(phi)};
 }
 
 const float3 cg::world::camera::get_right() const

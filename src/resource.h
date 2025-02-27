@@ -38,11 +38,12 @@ namespace cg
 	{
 		data.resize(size);
 		stride = 0;
+		
 	}
 	template<typename T>
 	inline resource<T>::resource(size_t x_size, size_t y_size)
 	{
-		data.resize(x_size*y_size);
+		data.resize(x_size * y_size);
 		stride = x_size;
 	}
 	template<typename T>
@@ -67,7 +68,7 @@ namespace cg
 	template<typename T>
 	inline size_t resource<T>::size_bytes() const
 	{
-		return count() * item_size;
+		return item_size * count();
 	}
 	template<typename T>
 	inline size_t resource<T>::count() const
@@ -85,11 +86,11 @@ namespace cg
 	{
 		static color from_float3(const float3& in)
 		{
-			return color{in.x, in.y, in.z};
+			return {in.x, in.y, in.z};
 		};
 		float3 to_float3() const
 		{
-			return float3{r,g,b};
+			return float3{r, g, b};
 		}
 		float r;
 		float g;
@@ -101,14 +102,14 @@ namespace cg
 		static unsigned_color from_color(const color& color)
 		{
 			unsigned_color out{};
-			out.r = std::clamp(static_cast<int>(color.r*255.f),0,255);
-			out.g = std::clamp(static_cast<int>(color.g*255.f), 0, 255);
-			out.b = std::clamp(static_cast<int>(color.b*255.f), 0, 255);
+			out.r = std::clamp(static_cast<int>(color.r * 255.f), 0, 255);
+			out.g = std::clamp(static_cast<int>(color.g * 255.f), 0, 255);
+			out.b = std::clamp(static_cast<int>(color.b * 255.f), 0, 255);
 			return out;
 		};
 		static unsigned_color from_float3(const float3& color)
 		{
-			float3 preprocessed = clamp(255.f*color, 0.f, 255.f);
+			float3 preprocessed = clamp(255.f * color, 0.f, 255.f);
 			return unsigned_color{
 				static_cast<uint8_t>(preprocessed.x),
 				static_cast<uint8_t>(preprocessed.y),
@@ -121,7 +122,7 @@ namespace cg
 				static_cast<float>(r),
 				static_cast<float>(g),
 				static_cast<float>(b),
-			}/255.f;
+			} /255.f;
 		};
 		uint8_t r;
 		uint8_t g;
@@ -131,12 +132,23 @@ namespace cg
 
 	struct vertex
 	{
-		float3 position;
-		float3 normal;
-		float2 texture;
-		float3 ambient;
-		float3 diffuse;
-		float3 emissive;
+		float x;
+		float y;
+		float z;
+		float nx;
+		float ny;
+		float nz;
+		float u;
+		float v;
+		float ambient_r;
+		float ambient_g;
+		float ambient_b;
+		float diffuse_r;
+		float diffuse_g;
+		float diffuse_b;
+		float emissive_r;
+		float emissive_g;
+		float emissive_b;
 	};
 
 }// namespace cg
